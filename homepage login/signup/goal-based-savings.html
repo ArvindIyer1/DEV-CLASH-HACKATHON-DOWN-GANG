@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Goal-Based Savings - FinMate</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1c1c1e;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111;
+      color: white;
+      padding: 15px 30px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00ff88;
+    }
+
+    .nav-links a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #00ff88;
+    }
+
+    .cta-button {
+      background: #00ff88;
+      color: #000;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .goal-savings {
+      padding: 40px;
+      max-width: 800px;
+      margin: auto;
+      margin-top: 30px;
+      background: #2c2c2e;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,255,136,0.2);
+    }
+
+    .goal-savings h2 {
+      text-align: center;
+      color: #00ff88;
+    }
+
+    .goal-savings p {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 16px;
+      color: #ccc;
+    }
+
+    form input, form button {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    form input {
+      background: #1c1c1e;
+      color: #f0f0f0;
+      border: 1px solid #00ff88;
+    }
+
+    form button {
+      background: #00ff88;
+      color: #000;
+      font-weight: bold;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    .progress-section {
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    .motivational-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #00ff88;
+      padding: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 24px;
+      color: #000;
+    }
+
+    .popup {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background: #2c2c2e;
+      border: 1px solid #00ff88;
+      padding: 15px;
+      border-radius: 10px;
+      display: none;
+      box-shadow: 0 0 15px rgba(0,255,136,0.3);
+    }
+
+    .popup span {
+      float: right;
+      cursor: pointer;
+      color: #00ff88;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: #111;
+      color: #ccc;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">FinMate</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="features.html">Features</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <button class="cta-button">Get Started</button>
+  </div>
+
+  <section class="goal-savings">
+    <h2>Goal-Based Savings</h2>
+    <p>
+      Set, track and stay motivated with your financial goals using FinMate. Our smart goal tracker helps you save efficiently with progress graphs, daily nudges, and motivation built on psychological design cues.
+    </p>
+
+    <form id="goalForm">
+      <label for="goalName">Goal Name:</label>
+      <input type="text" id="goalName" required>
+
+      <label for="targetAmount">Target Amount (₹):</label>
+      <input type="number" id="targetAmount" required>
+
+      <label for="duration">Duration (Days):</label>
+      <input type="number" id="duration" required>
+
+      <button type="submit">Set Goal</button>
+    </form>
+
+    <div class="progress-section" id="progressSection">
+      <canvas id="goalChart" width="400" height="250"></canvas>
+      <p id="motivationMessage">Let's start saving!</p>
+    </div>
+  </section>
+
+  <div class="motivational-icon" onclick="showMotivation()">
+    💡
+  </div>
+
+  <div id="motivationPopup" class="popup">
+    <p id="popupText">Keep going! Every rupee counts!</p>
+    <span onclick="closePopup()">✖</span>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2025 FinMate. All rights reserved.</p>
+  </footer>
+
+  <script>
+    let chart;
+
+    document.getElementById('goalForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const goalName = document.getElementById('goalName').value;
+      const target = parseFloat(document.getElementById('targetAmount').value);
+      const duration = parseInt(document.getElementById('duration').value);
+      const saved = 0;
+      const dailySave = target / duration;
+
+      updateChart(saved, target, duration);
+      document.getElementById('motivationMessage').innerText = `You're saving ₹${dailySave.toFixed(2)} daily for "${goalName}"`;
+
+
+      document.getElementById('progressSection').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    function updateChart(saved, target, duration) {
+      const now = new Date();
+      const labels = Array.from({length: duration}, (_, i) => {
+        const date = new Date(now);
+        date.setDate(now.getDate() + i);
+        return date.toLocaleDateString();
+      });
+
+      const daily = target / duration;
+      const dataPoints = labels.map((_, i) => (daily * (i + 1)).toFixed(2));
+
+      const data = {
+        labels: labels,
+        datasets: [{
+          label: 'Savings Progress (₹)',
+          data: dataPoints,
+          fill: false,
+          borderColor: '#00ff88',
+          backgroundColor: '#00ff88',
+          tension: 0.3
+        }]
+      };
+
+      if (chart) chart.destroy();
+      const ctx = document.getElementById('goalChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              labels: { color: '#f0f0f0' }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#ccc' },
+              grid: { color: '#333' }
+            },
+            y: {
+              ticks: { color: '#ccc' },
+              grid: { color: '#333' }
+            }
+          }
+        }
+      });
+    }
+
+    function showMotivation() {
+      const messages = [
+        "You're doing great!",
+        "Stay consistent — your goals are within reach!",
+        "Small steps lead to big savings!",
+        "Each day you save brings you closer!",
+        "Keep up the momentum!"
+      ];
+      const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+      document.getElementById('popupText').innerText = randomMsg;
+      document.getElementById('motivationPopup').style.display = 'block';
+    }
+
+    function closePopup() {
+      document.getElementById('motivationPopup').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

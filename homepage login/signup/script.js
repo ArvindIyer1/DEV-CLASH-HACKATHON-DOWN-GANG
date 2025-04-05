@@ -1,19 +1,24 @@
-// Hero section button interaction
-document.addEventListener("DOMContentLoaded", () => {
-  const heroBtn = document.querySelector(".hero-btn");
-  if (heroBtn) {
-    heroBtn.addEventListener("click", () => {
-      alert("Welcome to FinMate! Your smarter way to manage money.");
-      window.location.href = "signup.html"; // redirect to signup
+// Smooth scroll for nav links
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', function (e) {
+    const href = this.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  });
+});
+
+// Button click pulse effect
+document.addEventListener('DOMContentLoaded', () => {
+  const exploreBtn = document.querySelector('.btn-primary');
+  if (exploreBtn) {
+    exploreBtn.addEventListener('click', function () {
+      this.classList.add('pulse');
+      setTimeout(() => this.classList.remove('pulse'), 500);
     });
   }
-
-  // Google button interaction (login or signup)
-  const googleBtns = document.querySelectorAll(".google-btn");
-  googleBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      alert("Redirecting to Google Sign-In...");
-      // Here you'd integrate Google Sign-In SDK
-    });
-  });
 });

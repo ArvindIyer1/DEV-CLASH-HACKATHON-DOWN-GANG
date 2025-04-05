@@ -3,8 +3,100 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FinMate - Features</title>
+  <title>Features - FinMate</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #1c1c1e;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #111;
+      padding: 15px 30px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00ff88;
+    }
+
+    .nav-links a {
+      color: #ffffff;
+      margin-left: 20px;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #00ff88;
+    }
+
+    .features-section {
+      padding: 60px 30px;
+      text-align: center;
+    }
+
+    .features-section h2 {
+      font-size: 36px;
+      margin-bottom: 40px;
+      color: #00ff88;
+    }
+
+    .features-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .feature-card {
+      background-color: #2c2c2e;
+      border-radius: 12px;
+      padding: 30px;
+      width: 300px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 10px rgba(0,255,136,0.2);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(0,255,136,0.4);
+    }
+
+    .feature-card img {
+      width: 80px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      color: #00ff88;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 15px;
+      color: #ccc;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #111;
+      color: #ccc;
+      margin-top: 40px;
+    }
+  </style>
 </head>
 <body>
   <div class="navbar">
@@ -15,28 +107,30 @@
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </div>
-    <button class="cta-button">Get Started</button>
   </div>
 
-  <section class="features" id="features">
+  <section class="features-section">
     <h2>Explore FinMate Features</h2>
-    <div class="feature-cards">
-      <div class="card">
-        <img src="https://img.icons8.com/fluency/48/split.png" alt="Bill Splitting Icon" />
-        <h3>Bill Splitting</h3>
-        <p>Split expenses with friends or roommates easily. Track who owes what in real-time.</p>
-      </div>
-
-      <div class="card">
-        <img src="https://img.icons8.com/fluency/48/accounting.png" alt="Expense Tracking Icon" />
+    <div class="features-grid">
+      <!-- Expense Tracking (linked to goal-based-savings.html) -->
+      <div class="feature-card" onclick="location.href='goal-based-savings.html'">
+        <img src="expense-tracking.png" alt="Expense Tracking" />
         <h3>Expense Tracking</h3>
-        <p>Monitor your spending patterns, get insights, and stay within your monthly budget.</p>
+        <p>Track your daily, weekly, and monthly expenses with smart visual insights.</p>
       </div>
 
-      <div class="card">
-        <img src="https://img.icons8.com/fluency/48/brainstorm-skill.png" alt="Learn and Earn Icon" />
+      <!-- Bill Splitting -->
+      <div class="feature-card" onclick="location.href='split-bills.html'">
+        <img src="bill-split.png" alt="Bill Splitting" />
+        <h3>Bill Splitting</h3>
+        <p>Split bills easily with friends, roommates, and more.</p>
+      </div>
+
+      <!-- Learn & Earn -->
+      <div class="feature-card" onclick="location.href='learn-earn.html'">
+        <img src="learn-earn.png" alt="Learn and Earn" />
         <h3>Learn & Earn</h3>
-        <p>Boost your financial literacy through bite-sized lessons — earn rewards as you learn.</p>
+        <p>Gamified financial literacy content with reward-based learning.</p>
       </div>
     </div>
   </section>

@@ -1,165 +1,111 @@
-/* Reset */
-* {
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #1a1a1a; /* dark charcoal */
+  color: #eaeaea; /* soft white */
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #0d1b2a;
-  color: #ee8215;
-}
-
-/* Navbar */
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 10%;
-  background-color: #1b263b;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  background-color: #242424; /* slightly lighter charcoal */
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 8px rgba(57, 255, 20, 0.08);
 }
 
-.logo {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #e0e1dd;
+.navbar-brand span {
+  color: #39ff14; /* neon green */
+  font-weight: 700;
 }
 
-.nav-links a {
-  color: #e0e1dd;
-  margin: 0 15px;
-  text-decoration: none;
-  font-weight: 500;
+.navbar-nav .nav-link {
+  color: #eaeaea;
+  transition: color 0.3s ease;
 }
 
-.nav-links a:hover {
-  color: #f38723;
+.navbar-nav .nav-link:hover {
+  color: #39ff14;
 }
 
-.auth-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.auth-buttons button {
-  background-color: #00b4d8;
-  color: #001d3d;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.auth-buttons button:hover {
-  background-color: #0096c7;
-}
-
-/* Hero Section */
 .hero {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  padding: 80px 10%;
-  background: #001d3d;
+  position: relative;
+  background: linear-gradient(to bottom right, #111111e0, #1a1a1ae0),
+    url('https://cdn.pixabay.com/photo/2022/01/17/17/51/finance-6944640_1280.jpg') no-repeat center center;
+  background-size: cover;
+  padding: 140px 0;
+  color: #39ff14;
+  text-align: center;
 }
 
-.hero-text {
-  flex: 1;
-  min-width: 300px;
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #eaeaea;
 }
 
-.hero-text h1 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+.hero p {
+  font-size: 1.2rem;
+  color: #c0c0c0;
 }
 
-.hero-text p {
-  font-size: 1.1rem;
-  margin-bottom: 30px;
-}
-
-.hero-btn {
-  background-color: #00b4d8;
-  color: #001d3d;
-  padding: 12px 24px;
+.btn-primary {
+  background-color: #39ff14;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
+  color: #1e1e1e;
+  padding: 0.75rem 1.75rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px #39ff14a0;
+  transition: all 0.3s ease;
 }
 
-hero-image img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 180, 216, 0.3);
-  transition: transform 0.3s ease;
+.btn-primary:hover {
+  background-color: #32e314;
+  box-shadow: 0 0 15px #39ff14cc;
 }
 
-.hero-image img:hover {
-  transform: scale(1.03);
-}
-
-/* Features Section */
-.features {
-  padding: 60px 10%;
-  background-color: #0d1b2a;
+.mockup-section {
+  background-color: #141414;
+  padding: 90px 0;
   text-align: center;
 }
 
-.features h2 {
-  margin-bottom: 40px;
-  font-size: 2rem;
+.mockup-section h2 {
+  color: #39ff14;
+  font-weight: 700;
+  margin-bottom: 2rem;
 }
 
-.feature-cards {
+.mockup-gallery {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
   justify-content: center;
+  gap: 2rem;
 }
 
-.card {
-  background-color: #1b263b;
-  padding: 30px;
-  border-radius: 12px;
-  width: 300px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+.mockup-img {
+  max-width: 320px;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(57, 255, 20, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card h3 {
-  margin-bottom: 15px;
-  color: #00b4d8;
+.mockup-img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px rgba(57, 255, 20, 0.3);
 }
 
-/* Footer */
-.footer {
-  background-color: #1b263b;
-  color: #aaa;
-  text-align: center;
-  padding: 20px;
-}
-.hero-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2rem;
-  flex-wrap: wrap;
+.pulse {
+  animation: pulse-glow 0.5s ease-in-out;
 }
 
-.hero-text {
-  max-width: 600px;
-}
-
-.hero-image img {
-  max-width: 100%;
-  width: 400px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 rgba(57, 255, 20, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(57, 255, 20, 0.7);
+  }
 }

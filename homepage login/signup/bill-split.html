@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shared Cost Management - FinMate</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      background-color: #1c1c1c;
+      color: #b6ff00;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      margin-bottom: 20px;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #b6ff00;
+    }
+    .nav-links a {
+      color: #b6ff00;
+      text-decoration: none;
+      margin-left: 15px;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+    .group-container, .expense-form, .history-section, .summary-table {
+      background-color: #2e2e2e;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 10px #b6ff00;
+    }
+    .input-group {
+      margin-bottom: 10px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      background-color: #b6ff00;
+      color: #1c1c1c;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table th, table td {
+      border: 1px solid #444;
+      padding: 10px;
+      text-align: center;
+    }
+    table th {
+      background-color: #3d3d3d;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">FinMate</div>
+    <div class="nav-links">
+      <a href="index.html">Back to Home</a>
+    </div>
+  </div>
+
+  <h2>Shared Cost Management</h2>
+
+  <div class="group-container">
+    <h3>Create or Select Group</h3>
+    <div class="input-group">
+      <label for="groupName">Group Name:</label>
+      <input type="text" id="groupName" placeholder="e.g. Goa Trip, Flatmates" />
+    </div>
+    <button onclick="createGroup()">Create Group</button>
+    <div class="input-group">
+      <label for="groupSelect">Switch Group:</label>
+      <select id="groupSelect" onchange="refreshMembers()"></select>
+    </div>
+  </div>
+
+  <div class="group-container">
+    <h3>Add Members</h3>
+    <div class="input-group">
+      <label for="memberName">Member Name:</label>
+      <input type="text" id="memberName" placeholder="e.g. Rahul" />
+    </div>
+    <button onclick="addMember()">Add Member</button>
+    <div id="memberList"></div>
+  </div>
+
+  <div class="expense-form">
+    <h3>Add Expense</h3>
+    <div class="input-group">
+      <label for="paidBy">Paid By:</label>
+      <select id="paidBy"></select>
+    </div>
+    <div class="input-group">
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" placeholder="e.g. 500" />
+    </div>
+    <div class="input-group">
+      <label for="description">Description:</label>
+      <input type="text" id="description" placeholder="e.g. Petrol, Lunch" />
+    </div>
+    <button onclick="addExpense()">Add Expense</button>
+  </div>
+
+  <div class="history-section">
+    <h3>Expense History</h3>
+    <ul id="expenseHistory"></ul>
+  </div>
+
+  <div class="summary-table">
+    <h3>Balance Summary</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody id="balanceTable"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const groups = {};
+    let currentGroup = '';
+
+    function createGroup() {
+      const name = document.getElementById('groupName').value.trim();
+      if (name && !groups[name]) {
+        groups[name] = { members: [], expenses: [] };
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        document.getElementById('groupSelect').appendChild(option);
+        document.getElementById('groupName').value = '';
+        currentGroup = name;
+        document.getElementById('groupSelect').value = name;
+        refreshMembers();
+      }
+    }
+
+    function addMember() {
+      const member = document.getElementById('memberName').value.trim();
+      if (member && currentGroup && !groups[currentGroup].members.includes(member)) {
+        groups[currentGroup].members.push(member);
+        refreshMembers();
+        document.getElementById('memberName').value = '';
+      }
+    }
+
+    function refreshMembers() {
+      const group = document.getElementById('groupSelect').value;
+      if (!group) return;
+      currentGroup = group;
+      const members = groups[group].members;
+      const paidBy = document.getElementById('paidBy');
+      paidBy.innerHTML = '';
+      members.forEach(member => {
+        const option = document.createElement('option');
+        option.value = member;
+        option.textContent = member;
+        paidBy.appendChild(option);
+      });
+      document.getElementById('memberList').innerHTML = 'Members: ' + members.join(', ');
+      updateHistory();
+    }
+
+    function addExpense() {
+      const paidBy = document.getElementById('paidBy').value;
+      const amount = parseFloat(document.getElementById('amount').value);
+      const description = document.getElementById('description').value.trim();
+      if (paidBy && amount && description) {
+        const expense = { paidBy, amount, description };
+        groups[currentGroup].expenses.push(expense);
+        document.getElementById('amount').value = '';
+        document.getElementById('description').value = '';
+        updateHistory();
+      }
+    }
+
+    function updateHistory() {
+      const history = document.getElementById('expenseHistory');
+      const balanceTable = document.getElementById('balanceTable');
+      history.innerHTML = '';
+      balanceTable.innerHTML = '';
+
+      const members = groups[currentGroup].members;
+      const balances = {};
+      members.forEach(member => balances[member] = 0);
+
+      groups[currentGroup].expenses.forEach(exp => {
+        const share = exp.amount / members.length;
+        members.forEach(member => {
+          if (member === exp.paidBy) {
+            balances[member] += exp.amount - share;
+          } else {
+            balances[member] -= share;
+          }
+        });
+
+        const li = document.createElement('li');
+        li.textContent = `${exp.paidBy} paid ₹${exp.amount} for ${exp.description}`;
+        history.appendChild(li);
+      });
+
+      for (let member in balances) {
+        const row = document.createElement('tr');
+        const nameCell = document.createElement('td');
+        nameCell.textContent = member;
+        const balanceCell = document.createElement('td');
+        balanceCell.textContent = `₹${balances[member].toFixed(2)}`;
+        row.appendChild(nameCell);
+        row.appendChild(balanceCell);
+        balanceTable.appendChild(row);
+      }
+    }
+  </script>
+</body>
+</html>
