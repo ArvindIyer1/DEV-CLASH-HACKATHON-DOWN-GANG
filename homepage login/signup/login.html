@@ -60,6 +60,21 @@
   <script src="firebase-config.js"></script>
   
   <script>
+    // Function to handle successful login
+    function handleSuccessfulLogin() {
+      // Get the redirect URL if available
+      const redirectUrl = localStorage.getItem('redirectAfterLogin');
+      
+      if (redirectUrl) {
+        // Clear the saved redirect and go there
+        localStorage.removeItem('redirectAfterLogin');
+        window.location.href = redirectUrl;
+      } else {
+        // No specific redirect requested, go to home page instead of dashboard
+        window.location.href = 'index.html';
+      }
+    }
+    
     // Login form submission
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -78,14 +93,8 @@
       
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
-          // Handle redirect after successful login
-          const redirectUrl = localStorage.getItem('redirectAfterLogin');
-          if (redirectUrl) {
-            localStorage.removeItem('redirectAfterLogin');
-            window.location.href = redirectUrl;
-          } else {
-            window.location.href = 'dashboard.html';
-          }
+          // Use the common handler for successful login
+          handleSuccessfulLogin();
         })
         .catch((error) => {
           console.error("Login error:", error);
@@ -103,14 +112,7 @@
       const provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
-          // Handle redirect after successful login
-          const redirectUrl = localStorage.getItem('redirectAfterLogin');
-          if (redirectUrl) {
-            localStorage.removeItem('redirectAfterLogin');
-            window.location.href = redirectUrl;
-          } else {
-            window.location.href = 'dashboard.html';
-          }
+          handleSuccessfulLogin();
         }).catch((error) => {
           document.getElementById('errorMessage').style.display = 'block';
           document.getElementById('errorMessage').textContent = error.message;
@@ -122,33 +124,18 @@
       const provider = new firebase.auth.FacebookAuthProvider();
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
-          // Handle redirect after successful login
-          const redirectUrl = localStorage.getItem('redirectAfterLogin');
-          if (redirectUrl) {
-            localStorage.removeItem('redirectAfterLogin');
-            window.location.href = redirectUrl;
-          } else {
-            window.location.href = 'dashboard.html';
-          }
+          handleSuccessfulLogin();
         }).catch((error) => {
           document.getElementById('errorMessage').style.display = 'block';
           document.getElementById('errorMessage').textContent = error.message;
         });
     });
     
-    // Check if there's a redirect URL saved - at the end to ensure other code runs first
+    // Check for already logged in users - redirect them appropriately
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        // User is signed in, check for redirect
-        const redirectUrl = localStorage.getItem('redirectAfterLogin');
-        if (redirectUrl) {
-          // Clear the saved redirect and go there
-          localStorage.removeItem('redirectAfterLogin');
-          window.location.href = redirectUrl;
-        } else {
-          // No redirect, go to dashboard
-          window.location.href = 'dashboard.html';
-        }
+        // User is already signed in, handle the redirect
+        handleSuccessfulLogin();
       }
     });
   </script>
