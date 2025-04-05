@@ -22,11 +22,11 @@ async function learnMoreClick(servicePage) {
   try {
     const isLoggedIn = await checkAuth();
     if (isLoggedIn) {
-      // User is logged in, redirect to service page
-      window.location.href = servicePage;
+      // User is logged in, redirect directly to dashboard instead of service page
+      window.location.href = 'dashboard.html';
     } else {
       // User is not logged in, redirect to login page
-      // Store the page they wanted to visit
+      // Store the page they wanted to visit (though we'll now ignore it)
       localStorage.setItem('redirectAfterLogin', servicePage);
       // Add a direct parameter to prevent auto-redirect if already logged in
       window.location.href = 'login.html?direct=true';

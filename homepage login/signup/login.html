@@ -145,6 +145,29 @@
     .home-link i {
       margin-right: 8px;
     }
+    
+    .form-check-input {
+      background-color: #1e1e1e;
+      border-color: #39ff14;
+    }
+    
+    .form-check-input:checked {
+      background-color: #39ff14;
+      border-color: #39ff14;
+    }
+    
+    .form-check-label {
+      color: #c0c0c0;
+      font-size: 0.9rem;
+    }
+    
+    .demo-btn {
+      background-color: #4a4a4a;
+    }
+
+    .demo-btn:hover {
+      background-color: #5a5a5a;
+    }
   </style>
 </head>
 
@@ -168,6 +191,10 @@
           <input type="password" class="form-control" id="password" placeholder="Password" required>
         </div>
       </div>
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="rememberMe">
+        <label class="form-check-label" for="rememberMe">Remember me</label>
+      </div>
       <button type="submit" class="btn btn-login">Login</button>
       <div class="error-message" id="errorMessage"></div>
     </form>
@@ -179,6 +206,7 @@
       <button class="social-btn fb-btn" id="facebookLogin">
         <i class="fab fa-facebook-f"></i>
       </button>
+      <button class="btn btn-login demo-btn mt-3" id="demoLogin">Try Demo Account</button>
     </div>
 
     <div class="auth-links">
@@ -195,14 +223,23 @@
   <script src="firebase-config.js"></script>
 
   <script>
-    function handleSuccessfulLogin() {
-      const redirectUrl = localStorage.getItem('redirectAfterLogin');
-      if (redirectUrl) {
-        localStorage.removeItem('redirectAfterLogin');
-        window.location.href = redirectUrl;
-      } else {
-        window.location.href = 'index.html';
+    // Check if user is already logged in
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is already logged in, check if we should redirect
+        const urlParams = new URLSearchParams(window.location.search);
+        const directParam = urlParams.get('direct');
+        
+        // Only auto-redirect if not specifically told to stay on login page
+        if (directParam !== 'true') {
+          handleSuccessfulLogin();
+        }
       }
+    });
+
+    function handleSuccessfulLogin() {
+      // Always redirect to dashboard
+      window.location.href = 'dashboard.html';
     }
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -210,6 +247,7 @@
 
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
+      const rememberMe = document.getElementById('rememberMe').checked;
       const errorMessage = document.getElementById('errorMessage');
 
       errorMessage.style.display = 'none';
@@ -218,7 +256,16 @@
       document.querySelector('.btn-login').textContent = "Logging in...";
       document.querySelector('.btn-login').disabled = true;
 
-      firebase.auth().signInWithEmailAndPassword(email, password)
+      // Set persistence based on checkbox
+      const persistence = rememberMe ? 
+        firebase.auth.Auth.Persistence.LOCAL : 
+        firebase.auth.Auth.Persistence.SESSION;
+        
+      firebase.auth().setPersistence(persistence)
+        .then(() => {
+          // Proceed with sign in
+          return firebase.auth().signInWithEmailAndPassword(email, password);
+        })
         .then(() => handleSuccessfulLogin())
         .catch((error) => {
           console.error("Login error:", error);
@@ -238,3 +285,52 @@
           document.getElementById('errorMessage').textContent = error.message;
         });
     });
+    
+    document.getElementById('facebookLogin').addEventListener('click', function() {
+      const provider = new firebase.auth.FacebookAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then(() => handleSuccessfulLogin())
+        .catch((error) => {
+          document.getElementById('errorMessage').style.display = 'block';
+          document.getElementById('errorMessage').textContent = error.message;
+        });
+    });
+    
+    document.getElementById('demoLogin').addEventListener('click', function() {
+      const demoEmail = "demo@finmate.example";
+      const demoPassword = "demo123";
+      
+      document.getElementById('errorMessage').style.display = 'none';
+      document.getElementById('demoLogin').textContent = "Logging in...";
+      document.getElementById('demoLogin').disabled = true;
+      
+      firebase.auth().signInWithEmailAndPassword(demoEmail, demoPassword)
+        .then(() => handleSuccessfulLogin())
+        .catch((error) => {
+          // If demo account doesn't exist yet, create it
+          if (error.code === 'auth/user-not-found') {
+            firebase.auth().createUserWithEmailAndPassword(demoEmail, demoPassword)
+              .then((userCredential) => {
+                // Update profile for demo user
+                return userCredential.user.updateProfile({
+                  displayName: "Demo User"
+                });
+              })
+              .then(() => handleSuccessfulLogin())
+              .catch((createError) => {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('errorMessage').textContent = createError.message;
+                document.getElementById('demoLogin').textContent = "Try Demo Account";
+                document.getElementById('demoLogin').disabled = false;
+              });
+          } else {
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('errorMessage').textContent = error.message;
+            document.getElementById('demoLogin').textContent = "Try Demo Account";
+            document.getElementById('demoLogin').disabled = false;
+          }
+        });
+    });
+  </script>
+</body>
+</html>
