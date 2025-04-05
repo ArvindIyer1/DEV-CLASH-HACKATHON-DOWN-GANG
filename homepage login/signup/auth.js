@@ -28,12 +28,13 @@ async function learnMoreClick(servicePage) {
       // User is not logged in, redirect to login page
       // Store the page they wanted to visit
       localStorage.setItem('redirectAfterLogin', servicePage);
-      window.location.href = 'login.html';
+      // Add a direct parameter to prevent auto-redirect if already logged in
+      window.location.href = 'login.html?direct=true';
     }
   } catch (error) {
     console.error("Authentication error:", error);
     // Default to login page on error
-    window.location.href = 'login.html';
+    window.location.href = 'login.html?direct=true';
   }
 }
 
