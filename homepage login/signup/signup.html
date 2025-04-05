@@ -92,11 +92,18 @@
       text-decoration: underline;
     }
     
-    .error-message {
-      color: #ff3939;
+    .message {
       margin-top: 15px;
       text-align: center;
       display: none;
+    }
+    
+    .error-message {
+      color: #ff3939;
+    }
+    
+    .success-message {
+      color: #39ff14;
     }
     
     .social-signup {
@@ -158,6 +165,12 @@
       color: #39ff14;
       text-decoration: none;
     }
+    
+    #successActions {
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+    }
   </style>
 </head>
 
@@ -210,7 +223,14 @@
       </div>
       
       <button type="submit" class="btn btn-signup">Create Account</button>
-      <div class="error-message" id="errorMessage"></div>
+      <div id="errorMessage" class="message error-message"></div>
+      <div id="successMessage" class="message success-message"></div>
+      
+      <div id="successActions" style="display: none;">
+        <button type="button" class="btn btn-signup" onclick="window.location.href='dashboard.html'">
+          Go to Dashboard
+        </button>
+      </div>
       
       <p class="terms">
         By signing up, you agree to our <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>
@@ -261,6 +281,12 @@
       const firstName = document.getElementById('firstName').value;
       const lastName = document.getElementById('lastName').value;
       const errorMessage = document.getElementById('errorMessage');
+      const successMessage = document.getElementById('successMessage');
+      
+      // Reset messages
+      errorMessage.style.display = 'none';
+      successMessage.style.display = 'none';
+      document.getElementById('successActions').style.display = 'none';
       
       // Check if passwords match
       if (password !== confirmPassword) {
@@ -275,8 +301,15 @@
           userCredential.user.updateProfile({
             displayName: firstName + " " + lastName
           }).then(() => {
-            // Redirect to dashboard
-            window.location.href = 'dashboard.html';
+            // Show success message instead of redirecting
+            successMessage.style.display = 'block';
+            successMessage.textContent = "Account created successfully! You can now use our services.";
+            
+            // Show the dashboard button option
+            document.getElementById('successActions').style.display = 'block';
+            
+            // Optional: Clear the form
+            document.getElementById('signupForm').reset();
           });
         })
         .catch((error) => {
@@ -288,34 +321,67 @@
     // Google signup
     document.getElementById('googleSignup').addEventListener('click', function() {
       const provider = new firebase.auth.GoogleAuthProvider();
+      
+      // Reset messages
+      document.getElementById('errorMessage').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'none';
+      document.getElementById('successActions').style.display = 'none';
+      
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
-          window.location.href = 'dashboard.html';
+          // Show success message instead of redirecting
+          const successMessage = document.getElementById('successMessage');
+          successMessage.style.display = 'block';
+          successMessage.textContent = "Account created successfully with Google! You can now use our services.";
+          
+          // Show the dashboard button option
+          document.getElementById('successActions').style.display = 'block';
         }).catch((error) => {
-          document.getElementById('errorMessage').style.display = 'block';
-          document.getElementById('errorMessage').textContent = error.message;
+          const errorMessage = document.getElementById('errorMessage');
+          errorMessage.style.display = 'block';
+          errorMessage.textContent = error.message;
         });
     });
     
     // Facebook signup
     document.getElementById('facebookSignup').addEventListener('click', function() {
       const provider = new firebase.auth.FacebookAuthProvider();
+      
+      // Reset messages
+      document.getElementById('errorMessage').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'none';
+      document.getElementById('successActions').style.display = 'none';
+      
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
-          window.location.href = 'dashboard.html';
+          // Show success message instead of redirecting
+          const successMessage = document.getElementById('successMessage');
+          successMessage.style.display = 'block';
+          successMessage.textContent = "Account created successfully with Facebook! You can now use our services.";
+          
+          // Show the dashboard button option
+          document.getElementById('successActions').style.display = 'block';
         }).catch((error) => {
-          document.getElementById('errorMessage').style.display = 'block';
-          document.getElementById('errorMessage').textContent = error.message;
+          const errorMessage = document.getElementById('errorMessage');
+          errorMessage.style.display = 'block';
+          errorMessage.textContent = error.message;
         });
     });
     
-    // Check if user is already logged in
+    // IMPORTANT: Remove the onAuthStateChanged automatic redirect
+    // This code was causing the automatic redirect to dashboard
+    // We've removed it to keep users on the signup page
+    
+    // If you need to check auth state for other purposes, 
+    // you can do it without redirecting:
+    /*
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        // User is signed in, redirect to dashboard
-        window.location.href = 'dashboard.html';
+        console.log("User is signed in:", user.displayName);
+        // Do something with the auth state, but don't redirect
       }
     });
+    */
   </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-// Create this as auth.js
+// This is for auth.js file - keeps track of where to go after login
 
 // Check if user is logged in
 function checkAuth() {
