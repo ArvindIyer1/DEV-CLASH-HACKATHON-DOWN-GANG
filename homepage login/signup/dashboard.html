@@ -3,462 +3,1148 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - FinMate</title>
+  <title>FinMate - Complete Financial Management</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #1e1e1e;
-      color: #ffffff;
-      min-height: 100vh;
+      background-color: #050913;
+      color: #5be22d;
     }
-
-    .navbar {
-      background-color: #2c2c2c;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .navbar-brand {
-      font-weight: 700;
-      font-size: 1.5rem;
-    }
-
-    .navbar-brand span {
-      color: #39ff14;
-    }
-
-    .nav-link {
-      color: #ffffff;
-      transition: all 0.3s ease;
-    }
-
-    .nav-link:hover {
-      color: #39ff14;
-    }
-
-    .active {
-      color: #39ff14;
-    }
-
+    
     .sidebar {
-      background-color: #2c2c2c;
-      height: calc(100vh - 56px);
+      background-color: #14192a;
+      height: 100vh;
       position: fixed;
+      padding: 1.5rem;
       width: 250px;
-      box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
-      padding-top: 20px;
-      transition: all 0.3s ease;
     }
-
-    .sidebar-link {
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      padding: 12px 20px;
-      transition: all 0.3s ease;
-      text-decoration: none;
-    }
-
-    .sidebar-link:hover {
-      background-color: #383838;
-      color: #39ff14;
-    }
-
-    .sidebar-link.active {
-      background-color: #383838;
-      color: #39ff14;
-      border-left: 4px solid #39ff14;
-    }
-
-    .sidebar-link i {
-      margin-right: 10px;
-      width: 20px;
-      text-align: center;
-    }
-
-    .main-content {
+    
+    .content {
       margin-left: 250px;
-      padding: 20px;
-      transition: all 0.3s ease;
+      padding: 2rem;
     }
-
+    
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .sidebar-logo i {
+      font-size: 1.8rem;
+      color: #39ff14;
+      margin-right: 0.75rem;
+    }
+    
+    .sidebar-logo h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+      color: #a19b9b;
+    }
+    
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      color: #5ae424;
+      text-decoration: none;
+      border-radius: 0.5rem;
+      transition: all 0.3s;
+    }
+    
+    .sidebar-link i {
+      margin-right: 0.75rem;
+      font-size: 1.1rem;
+    }
+    
+    .sidebar-link.active, .sidebar-link:hover {
+      background-color: #39ff14;
+      color: #0a0e17;
+    }
+    
     .card {
-      background-color: #2c2c2c;
-      border-radius: 10px;
+      background-color: #14192a;
       border: none;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-      margin-bottom: 20px;
+      border-radius: 1rem;
+      margin-bottom: 1.5rem;
     }
-
+    
     .card-header {
-      background-color: #383838;
-      border-bottom: none;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-      padding: 15px 20px;
-      font-weight: 600;
+      background-color: transparent;
+      border-bottom: 1px solid #2a3142;
+      padding: 1.25rem;
     }
-
-    .stats-card {
-      background-color: #2c2c2c;
-      border-radius: 10px;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    
+    .card-body {
+      padding: 1.5rem;
     }
-
-    .stats-icon {
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      border-radius: 10px;
-      margin-right: 15px;
+    
+    .stat-card {
+      background-color: #1e273a;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
     }
-
-    .stats-icon.green {
-      background-color: rgba(57, 255, 20, 0.2);
+    
+    .stat-card h3 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin: 0;
       color: #39ff14;
     }
-
-    .stats-icon.red {
-      background-color: rgba(255, 57, 57, 0.2);
-      color: #ff3939;
-    }
-
-    .stats-icon.blue {
-      background-color: rgba(20, 164, 255, 0.2);
-      color: #14a4ff;
-    }
-
-    .stats-icon.orange {
-      background-color: rgba(255, 165, 0, 0.2);
-      color: #ffa500;
-    }
-
-    .stats-info h3 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-
-    .stats-info p {
-      margin-bottom: 0;
-      color: #a0a0a0;
+    
+    .stat-card p {
+      margin: 0;
+      color: #959db3;
       font-size: 0.9rem;
     }
-
-    .btn-action {
+    
+    .btn-primary {
       background-color: #39ff14;
-      color: #1e1e1e;
       border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
+      color: #0a0e17;
       font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .btn-action:hover {
-      background-color: #32e314;
-      transform: translateY(-2px);
     }
     
-    .notification-badge {
-      position: absolute;
-      top: -6px;
-      right: -6px;
-      background-color: #ff3939;
-      color: white;
-      font-size: 0.7rem;
-      font-weight: 600;
-      width: 18px;
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
+    .btn-primary:hover {
+      background-color: #32d912;
+      color: #0a0e17;
     }
     
-    #accountDropdown {
-      cursor: pointer;
+    .btn-outline-primary {
+      border-color: #39ff14;
+      color: #39ff14;
     }
     
-    .welcome-message {
-      font-size: 1.8rem;
-      font-weight: 600;
-      margin-bottom: 30px;
-    }
-    
-    @media (max-width: 992px) {
-      .sidebar {
-        width: 70px;
-        padding-top: 15px;
-      }
-      
-      .sidebar-link span {
-        display: none;
-      }
-      
-      .sidebar-link {
-        justify-content: center;
-        padding: 15px;
-      }
-      
-      .sidebar-link i {
-        margin-right: 0;
-        font-size: 1.2rem;
-      }
-      
-      .main-content {
-        margin-left: 70px;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .sidebar {
-        display: none;
-      }
-      
-      .main-content {
-        margin-left: 0;
-      }
+    .btn-outline-primary:hover {
+      background-color: #39ff14;
+      color: #0a0e17;
     }
     
     .chart-container {
       height: 300px;
+      position: relative;
+    }
+
+    .page {
+      display: none;
     }
     
-    .table {
+    .page.active {
+      display: block;
+    }
+    
+    .transaction-item {
+      background-color: #1e273a;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .transaction-amount {
+      font-weight: 700;
+    }
+    
+    .transaction-amount.positive {
+      color: #39ff14;
+    }
+    
+    .transaction-amount.negative {
+      color: #ff3939;
+    }
+    
+    table {
       color: #ffffff;
     }
     
-    .table thead {
-      border-color: #444;
+    .table-dark {
+      background-color: #14192a;
     }
     
-    .table td, .table th {
-      border-color: #444;
+    thead th {
+      background-color: #1e273a !important;
+      border-color: #2a3142 !important;
+    }
+    
+    tbody td {
+      border-color: #2a3142;
+    }
+    
+    .tab-content {
+      background-color: #14192a;
+      border-radius: 0 0 0.5rem 0.5rem;
+      padding: 1.5rem;
+    }
+
+    .form-control, .form-select {
+      background-color: #1e273a;
+      border-color: #2a3142;
+      color: #ffffff;
+    }
+
+    .form-control:focus, .form-select:focus {
+      background-color: #1e273a;
+      border-color: #39ff14;
+      box-shadow: 0 0 0 0.25rem rgba(57, 255, 20, 0.25);
+      color: #ffffff;
+    }
+
+    .form-label {
+      color: #959db3;
+    }
+
+    .nav-tabs .nav-link {
+      color: #959db3;
+      border: none;
+    }
+
+    .nav-tabs .nav-link.active {
+      background-color: #14192a;
+      color: #39ff14;
+      border: none;
+      border-bottom: 2px solid #39ff14;
+    }
+
+    .profile-card {
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #39ff14;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    
+    .profile-img i {
+      font-size: 3rem;
+      color: #0a0e17;
     }
   </style>
 </head>
-
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="dashboard.html">Fin<span>Mate</span></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link position-relative me-3" href="#" id="notificationsLink">
-              <i class="fas fa-bell"></i>
-              <span class="notification-badge">3</span>
-            </a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown">
-              <i class="fas fa-user-circle"></i> <span id="userName">Account</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end bg-dark">
-              <li><a class="dropdown-item text-light" href="#"><i class="fas fa-user-cog me-2"></i> Profile Settings</a></li>
-              <li><a class="dropdown-item text-light" href="#"><i class="fas fa-lock me-2"></i> Security</a></li>
-              <li><hr class="dropdown-divider bg-secondary"></li>
-              <li><a class="dropdown-item text-light" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
   <!-- Sidebar -->
   <div class="sidebar">
-    <a href="dashboard.html" class="sidebar-link active">
-      <i class="fas fa-th-large"></i>
+    <div class="sidebar-logo">
+      <i class="fas fa-wallet"></i>
+      <h1>FinMate</h1>
+    </div>
+    <a href="#" class="sidebar-link active" onclick="showPage(event, 'dashboard')">
+      <i class="fas fa-chart-line"></i>
       <span>Dashboard</span>
     </a>
-    <a href="#" class="sidebar-link">
-      <i class="fas fa-wallet"></i>
-      <span>Accounts</span>
-    </a>
-    <a href="#" class="sidebar-link">
+    <a href="#" class="sidebar-link" onclick="showPage(event, 'transactions')">
       <i class="fas fa-exchange-alt"></i>
       <span>Transactions</span>
     </a>
-    <a href="#" class="sidebar-link">
-      <i class="fas fa-chart-pie"></i>
-      <span>Budget</span>
+    <a href="#" class="sidebar-link" onclick="showPage(event, 'expenses')">
+      <i class="fas fa-receipt"></i>
+      <span>Expenses</span>
     </a>
-    <a href="#" class="sidebar-link">
-      <i class="fas fa-chart-line"></i>
-      <span>Investments</span>
+    <a href="#" class="sidebar-link" onclick="showPage(event, 'billSplit')">
+      <i class="fas fa-file-invoice-dollar"></i>
+      <span>Split Bills</span>
     </a>
-    <a href="#" class="sidebar-link">
+    <a href="#" class="sidebar-link" onclick="showPage(event, 'savings')">
       <i class="fas fa-piggy-bank"></i>
       <span>Savings Goals</span>
     </a>
-    <a href="#" class="sidebar-link">
-      <i class="fas fa-file-invoice-dollar"></i>
-      <span>Bills</span>
-    </a>
-    <a href="#" class="sidebar-link">
-      <i class="fas fa-cog"></i>
-      <span>Settings</span>
+    <a href="#" class="sidebar-link" onclick="showPage(event, 'profile')">
+      <i class="fas fa-user"></i>
+      <span>Profile</span>
     </a>
   </div>
 
   <!-- Main Content -->
-  <div class="main-content">
-    <div class="welcome-message">Welcome, <span id="welcomeName">User</span>!</div>
-    
-    <!-- Stats Row -->
-    <div class="row">
-      <div class="col-xl-3 col-md-6">
-        <div class="stats-card">
-          <div class="stats-icon green">
-            <i class="fas fa-dollar-sign"></i>
-          </div>
-          <div class="stats-info">
-            <h3>$5,428.20</h3>
+  <div class="content">
+    <!-- Dashboard Page -->
+    <div id="dashboard" class="page active">
+      <h2 class="mb-4">Financial Dashboard</h2>
+      
+      <div class="row">
+        <div class="col-md-3">
+          <div class="stat-card">
             <p>Total Balance</p>
+            <h3><span id="totalBalance">₹238,500</span></h3>
           </div>
         </div>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <div class="stats-card">
-          <div class="stats-icon red">
-            <i class="fas fa-credit-card"></i>
-          </div>
-          <div class="stats-info">
-            <h3>$1,256.75</h3>
-            <p>Monthly Expenses</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <div class="stats-card">
-          <div class="stats-icon blue">
-            <i class="fas fa-chart-line"></i>
-          </div>
-          <div class="stats-info">
-            <h3>$842.50</h3>
+        <div class="col-md-3">
+          <div class="stat-card">
             <p>Monthly Income</p>
+            <h3><span id="monthlyIncome">₹145,000</span></h3>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card">
+            <p>Monthly Expenses</p>
+            <h3><span id="monthlyExpenses">₹98,500</span></h3>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card">
+            <p>Savings Rate</p>
+            <h3><span id="savingsRate">32%</span></h3>
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-md-6">
-        <div class="stats-card">
-          <div class="stats-icon orange">
-            <i class="fas fa-piggy-bank"></i>
+      
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Monthly Spending</h5>
+              <div class="btn-group">
+                <button class="btn btn-sm btn-outline-primary">3M</button>
+                <button class="btn btn-sm btn-primary">6M</button>
+                <button class="btn btn-sm btn-outline-primary">1Y</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="spendingChart"></canvas>
+              </div>
+            </div>
           </div>
-          <div class="stats-info">
-            <h3>$2,150.00</h3>
-            <p>Savings</p>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Spending by Category</h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="categoryChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Recent Transactions</h5>
+            </div>
+            <div class="card-body">
+              <div class="transaction-item d-flex justify-content-between">
+                <div>
+                  <h6>Grocery Shopping</h6>
+                  <small class="text-muted">Apr 5, 2025</small>
+                </div>
+                <span class="transaction-amount negative">-₹4,500</span>
+              </div>
+              <div class="transaction-item d-flex justify-content-between">
+                <div>
+                  <h6>Salary Deposit</h6>
+                  <small class="text-muted">Apr 1, 2025</small>
+                </div>
+                <span class="transaction-amount positive">+₹145,000</span>
+              </div>
+              <div class="transaction-item d-flex justify-content-between">
+                <div>
+                  <h6>Electric Bill</h6>
+                  <small class="text-muted">Mar 29, 2025</small>
+                </div>
+                <span class="transaction-amount negative">-₹3,200</span>
+              </div>
+              <div class="text-center mt-3">
+                <a href="#" class="btn btn-sm btn-outline-primary" onclick="showPage(event, 'transactions')">View All Transactions</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Upcoming Bills</h5>
+            </div>
+            <div class="card-body">
+              <div class="transaction-item d-flex justify-content-between">
+                <div>
+                  <h6>Rent Payment</h6>
+                  <small class="text-muted">Due: Apr 10, 2025</small>
+                </div>
+                <span class="transaction-amount">₹32,000</span>
+              </div>
+              <div class="transaction-item d-flex justify-content-between">
+                <div>
+                  <h6>Internet Bill</h6>
+                  <small class="text-muted">Due: Apr 15, 2025</small>
+                </div>
+                <span class="transaction-amount">₹1,500</span>
+              </div>
+              <div class="transaction-item d-flex justify-content-between">
+                <div>
+                  <h6>Credit Card Payment</h6>
+                  <small class="text-muted">Due: Apr 20, 2025</small>
+                </div>
+                <span class="transaction-amount">₹15,000</span>
+              </div>
+              <div class="text-center mt-3">
+                <a href="#" class="btn btn-sm btn-outline-primary">Manage Bills</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- Charts Row -->
-    <div class="row">
-      <div class="col-lg-8">
-        <div class="card mb-4">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <span>Spending Overview</span>
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-light">Week</button>
-              <button type="button" class="btn btn-sm btn-outline-light active">Month</button>
-              <button type="button" class="btn btn-sm btn-outline-light">Year</button>
+
+    <!-- Transactions Page -->
+    <div id="transactions" class="page">
+      <h2 class="mb-4">Transactions</h2>
+      
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <label class="form-label">Date Range</label>
+              <select class="form-select">
+                <option>Last 30 days</option>
+                <option>Last 90 days</option>
+                <option>This year</option>
+                <option>Custom range</option>
+              </select>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label class="form-label">Category</label>
+              <select class="form-select">
+                <option>All Categories</option>
+                <option>Food & Groceries</option>
+                <option>Transportation</option>
+                <option>Housing</option>
+                <option>Entertainment</option>
+                <option>Utilities</option>
+                <option>Health</option>
+              </select>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label class="form-label">Type</label>
+              <select class="form-select">
+                <option>All Types</option>
+                <option>Income</option>
+                <option>Expense</option>
+                <option>Transfer</option>
+              </select>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label class="form-label">Amount</label>
+              <div class="input-group">
+                <span class="input-group-text">₹</span>
+                <input type="text" class="form-control" placeholder="Min">
+                <span class="input-group-text">-</span>
+                <input type="text" class="form-control" placeholder="Max">
+              </div>
             </div>
           </div>
-          <div class="card-body">
-            <div class="chart-container">
-              <canvas id="spendingChart"></canvas>
-            </div>
+          <div class="d-flex justify-content-between mt-2">
+            <button class="btn btn-outline-primary">
+              <i class="fas fa-filter"></i> Apply Filters
+            </button>
+            <button class="btn btn-primary">
+              <i class="fas fa-plus"></i> Add Transaction
+            </button>
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
-        <div class="card mb-4">
-          <div class="card-header">
-            <span>Expense Categories</span>
+      
+      <div class="card">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-dark mb-0">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Apr 5, 2025</td>
+                  <td>Grocery Shopping</td>
+                  <td>Food & Groceries</td>
+                  <td class="text-danger">-₹4,500</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Apr 1, 2025</td>
+                  <td>Salary Deposit</td>
+                  <td>Income</td>
+                  <td class="text-success">+₹145,000</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Mar 29, 2025</td>
+                  <td>Electric Bill</td>
+                  <td>Utilities</td>
+                  <td class="text-danger">-₹3,200</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Mar 25, 2025</td>
+                  <td>Restaurant Dinner</td>
+                  <td>Food & Groceries</td>
+                  <td class="text-danger">-₹2,800</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Mar 22, 2025</td>
+                  <td>Uber Rides</td>
+                  <td>Transportation</td>
+                  <td class="text-danger">-₹1,250</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="card-body">
-            <div class="chart-container">
-              <canvas id="categoryChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expenses Page -->
+    <div id="expenses" class="page">
+      <h2 class="mb-4">Track Expenses</h2>
+      
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Add New Expense</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <input type="text" class="form-control" placeholder="E.g., Grocery shopping">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Amount</label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input type="number" class="form-control" placeholder="0.00">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Category</label>
+                <select class="form-select">
+                  <option>Food & Groceries</option>
+                  <option>Transportation</option>
+                  <option>Housing</option>
+                  <option>Entertainment</option>
+                  <option>Utilities</option>
+                  <option>Health</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Payment Method</label>
+                <select class="form-select">
+                  <option>Cash</option>
+                  <option>Credit Card</option>
+                  <option>Debit Card</option>
+                  <option>UPI</option>
+                  <option>Net Banking</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Note (Optional)</label>
+                <textarea class="form-control" rows="2"></textarea>
+              </div>
+              <button class="btn btn-primary w-100">
+                <i class="fas fa-plus-circle"></i> Add Expense
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Monthly Expense Breakdown</h5>
+              <select class="form-select" style="width: 150px">
+                <option>April 2025</option>
+                <option>March 2025</option>
+                <option>February 2025</option>
+              </select>
+            </div>
+            <div class="card-body">
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <div class="stat-card">
+                    <p>Total Expenses</p>
+                    <h3>₹98,500</h3>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="stat-card">
+                    <p>Budget Utilization</p>
+                    <h3>82%</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-dark mb-0">
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Amount</th>
+                      <th>% of Total</th>
+                      <th>vs. Last Month</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Food & Groceries</td>
+                      <td>₹25,000</td>
+                      <td>25.4%</td>
+                      <td><span class="text-success">↓ 5.2%</span></td>
+                    </tr>
+                    <tr>
+                      <td>Housing</td>
+                      <td>₹30,000</td>
+                      <td>30.5%</td>
+                      <td><span class="text-muted">0%</span></td>
+                    </tr>
+                    <tr>
+                      <td>Transportation</td>
+                      <td>₹15,000</td>
+                      <td>15.2%</td>
+                      <td><span class="text-danger">↑ 8.3%</span></td>
+                    </tr>
+                    <tr>
+                      <td>Entertainment</td>
+                      <td>₹8,000</td>
+                      <td>8.1%</td>
+                      <td><span class="text-danger">↑ 12.5%</span></td>
+                    </tr>
+                    <tr>
+                      <td>Utilities</td>
+                      <td>₹12,000</td>
+                      <td>12.2%</td>
+                      <td><span class="text-success">↓ 3.1%</span></td>
+                    </tr>
+                    <tr>
+                      <td>Health</td>
+                      <td>₹8,500</td>
+                      <td>8.6%</td>
+                      <td><span class="text-success">↓ 7.6%</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- Recent Transactions -->
-    <div class="row">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <span>Recent Transactions</span>
-            <button class="btn btn-sm btn-action">View All</button>
+
+    <!-- Bill Split Page -->
+    <div id="billSplit" class="page">
+      <h2 class="mb-4">Split Bills</h2>
+      
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Group Management</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label">Select Group</label>
+                <select id="groupSelect" class="form-select mb-2" onchange="refreshMembers()">
+                  <option value="">Select or create a group</option>
+                </select>
+                <div class="input-group">
+                  <input type="text" id="groupName" class="form-control" placeholder="New group name">
+                  <button class="btn btn-primary" onclick="createGroup()">Create</button>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <label class="form-label mb-0">Group Members</label>
+                </div>
+                <div id="memberList" class="mb-2">Members: None</div>
+                <div class="input-group mb-2">
+                  <input type="text" id="memberName" class="form-control" placeholder="Name">
+                  <input type="text" id="memberUPI" class="form-control" placeholder="UPI ID">
+                </div>
+                <button class="btn btn-primary w-100" onclick="addMember()">Add Member</button>
+              </div>
+              
+              <div class="row">
+                <div class="col-6">
+                  <div class="stat-card">
+                    <p>Groups</p>
+                    <h3 id="totalGroups">0</h3>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="stat-card">
+                    <p>Members</p>
+                    <h3 id="totalMembers">0</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Apr 05, 2025</td>
-                    <td>Grocery Store</td>
-                    <td>Food & Groceries</td>
-                    <td class="text-danger">-$89.24</td>
-                    <td><span class="badge bg-success">Completed</span></td>
-                  </tr>
-                  <tr>
-                    <td>Apr 04, 2025</td>
-                    <td>Monthly Salary</td>
-                    <td>Income</td>
-                    <td class="text-success">+$3,250.00</td>
-                    <td><span class="badge bg-success">Completed</span></td>
-                  </tr>
-                  <tr>
-                    <td>Apr 03, 2025</td>
-                    <td>Coffee Shop</td>
-                    <td>Food & Drinks</td>
-                    <td class="text-danger">-$4.85</td>
-                    <td><span class="badge bg-success">Completed</span></td>
-                  </tr>
-                  <tr>
-                    <td>Apr 03, 2025</td>
-                    <td>Electric Bill</td>
-                    <td>Utilities</td>
-                    <td class="text-danger">-$125.40</td>
-                    <td><span class="badge bg-success">Completed</span></td>
-                  </tr>
-                  <tr>
-                    <td>Apr 02, 2025</td>
-                    <td>Streaming Service</td>
-                    <td>Entertainment</td>
-                    <td class="text-danger">-$14.99</td>
-                    <td><span class="badge bg-success">Completed</span></td>
-                  </tr>
-                </tbody>
-              </table>
+          
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Add Expense</h5>
+            </div>
+            <div class="card-body">
+              <div id="activeGroupDisplay" class="mb-3">
+                <p class="mb-1">Active Group:</p>
+                <h5 id="activeGroup" class="mb-0">-</h5>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Paid By</label>
+                <select id="paidBy" class="form-select">
+                  <option value="">Select member</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Amount</label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input type="number" id="amount" class="form-control" placeholder="0.00">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <input type="text" id="description" class="form-control" placeholder="E.g., Dinner">
+              </div>
+              <button class="btn btn-primary w-100" onclick="addExpense()">
+                Add Expense
+              </button>
+              <div class="text-center mt-3">
+                <p class="mb-0">Total Expenses: <strong id="totalExpenses">₹0.00</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header">
+              <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="true">Expense History</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="balance-tab" data-bs-toggle="tab" data-bs-target="#balance" type="button" role="tab" aria-controls="balance" aria-selected="false">Balances</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="settlement-tab" data-bs-toggle="tab" data-bs-target="#settlement" type="button" role="tab" aria-controls="settlement" aria-selected="false">Settlement</button>
+                </li>
+              </ul>
+            </div>
+            <div class="tab-content">
+              <div class="tab-pane fade show active" id="history" role="tabpanel" aria-labelledby="history-tab">
+                <ul id="expenseHistory" class="list-unstyled mb-0">
+                  <li class="text-muted text-center py-3">No expenses yet</li>
+                </ul>
+              </div>
+              <div class="tab-pane fade" id="balance" role="tabpanel" aria-labelledby="balance-tab">
+                <div class="table-responsive">
+                  <table class="table table-dark mb-0">
+                    <thead>
+                      <tr>
+                        <th>Member</th>
+                        <th>Balance</th>
+                      </tr>
+                    </thead>
+                    <tbody id="balanceTable">
+                      <tr>
+                        <td colspan="2" class="text-center text-muted">No data available</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="settlement" role="tabpanel" aria-labelledby="settlement-tab">
+                <h6 class="mb-3">Daily Settlement Plan</h6>
+                <ul id="dailyOweList" class="list-unstyled mb-4">
+                  <li class="text-muted text-center py-3">No settlement needed</li>
+                </ul>
+                <div id="conclusion" class="mb-3"></div>
+                <div id="qrSection"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Savings Goals Page -->
+    <div id="savings" class="page">
+      <h2 class="mb-4">Savings Goals</h2>
+      
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <div class="card-header">
+              <h5 class="mb-0">Create New Goal</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label">Goal Name</label>
+                <input type="text" class="form-control" placeholder="E.g., Emergency Fund">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Target Amount</label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input type="number" class="form-control" placeholder="0">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Target Date</label>
+                <input type="date" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Initial Deposit (Optional)</label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input type="number" class="form-control" placeholder="0">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Priority</label>
+                <select class="form-select">
+                  <option>High</option>
+                  <option selected>Medium</option>
+                  <option>Low</option>
+                </select>
+              </div>
+              <button class="btn btn-primary w-100">Create Goal</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-8">
+          <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Your Savings Goals</h5>
+              <div>
+                <select class="form-select" style="width: 150px">
+                  <option>All Goals</option>
+                  <option>Active</option>
+                  <option>Completed</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-dark mb-0">
+                  <thead>
+                    <tr>
+                      <th>Goal Name</th>
+                      <th>Target / Progress</th>
+                      <th>Deadline</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Emergency Fund</td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 75%"></div>
+                          </div>
+                          <span>₹750,000 / ₹1,000,000</span>
+                        </div>
+                      </td>
+                      <td>Dec 31, 2025</td>
+                      <td><span class="badge bg-success">On Track</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary">
+                          <i class="fas fa-plus"></i> Add
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>New Car</td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"></div>
+                          </div>
+                          <span>₹600,000 / ₹1,500,000</span>
+                        </div>
+                      </td>
+                      <td>Sep 30, 2025</td>
+                      <td><span class="badge bg-warning">Behind</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary">
+                          <i class="fas fa-plus"></i> Add
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Vacation Fund</td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 25%"></div>
+                          </div>
+                          <span>₹50,000 / ₹200,000</span>
+                        </div>
+                      </td>
+                      <td>Jul 15, 2025</td>
+                      <td><span class="badge bg-info">New</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary">
+                          <i class="fas fa-plus"></i> Add
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Savings Analytics</h5>
+            </div>
+            <div class="card-body">
+              <div class="row mb-4">
+                <div class="col-md-4">
+                  <div class="stat-card">
+                    <p>Total Saved</p>
+                    <h3>₹1,400,000</h3>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="stat-card">
+                    <p>Monthly Contribution</p>
+                    <h3>₹45,000</h3>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="stat-card">
+                    <p>Goals Completed</p>
+                    <h3>2/5</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-container">
+                <canvas id="savingsProgressChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="profile" class="page">
+      <h2 class="mb-4">Your Profile</h2>
+      
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body profile-card">
+              <div class="profile-img">
+                <i class="fas fa-user"></i>
+              </div>
+              <h4 class="mb-1">Rohit Sharma</h4>
+              <p class="text-muted mb-3">Premium Member</p>
+              <div class="d-grid gap-2">
+                <button class="btn btn-primary">
+                  <i class="fas fa-edit"></i> Edit Profile
+                </button>
+                <button class="btn btn-outline-primary">
+                  <i class="fas fa-cog"></i> Account Settings
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card mt-4">
+            <div class="card-header">
+              <h5 class="mb-0">Account Information</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <small class="text-muted d-block">Email Address</small>
+                <p class="mb-0">rohit.sharma@example.com</p>
+              </div>
+              <div class="mb-3">
+                <small class="text-muted d-block">Phone Number</small>
+                <p class="mb-0">+91 9876543210</p>
+              </div>
+              <div class="mb-3">
+                <small class="text-muted d-block">Member Since</small>
+                <p class="mb-0">January 15, 2025</p>
+              </div>
+              <div>
+                <small class="text-muted d-block">Current Plan</small>
+                <p class="mb-0">Premium (₹499/month)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-8">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Linked Accounts</h5>
+            </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <h6 class="mb-1">HDFC Bank</h6>
+                  <small class="text-muted">xxxx xxxx xxxx 4589</small>
+                </div>
+                <div>
+                  <span class="badge bg-success me-2">Primary</span>
+                  <button class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-sync"></i> Sync
+                  </button>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <h6 class="mb-1">SBI Bank</h6>
+                  <small class="text-muted">xxxx xxxx xxxx 1234</small>
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-sync"></i> Sync
+                  </button>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="mb-1">ICICI Credit Card</h6>
+                  <small class="text-muted">xxxx xxxx xxxx 7890</small>
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-sync"></i> Sync
+                  </button>
+                </div>
+              </div>
+              <hr>
+              <button class="btn btn-primary">
+                <i class="fas fa-plus"></i> Link New Account
+              </button>
+            </div>
+          </div>
+          
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Notification Settings</h5>
+            </div>
+            <div class="card-body">
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="emailNotif" checked>
+                <label class="form-check-label" for="emailNotif">Email Notifications</label>
+              </div>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="smsNotif" checked>
+                <label class="form-check-label" for="smsNotif">SMS Notifications</label>
+              </div>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="pushNotif" checked>
+                <label class="form-check-label" for="pushNotif">Push Notifications</label>
+              </div>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="reminderNotif" checked>
+                <label class="form-check-label" for="reminderNotif">Bill Payment Reminders</label>
+              </div>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="budgetAlert">
+                <label class="form-check-label" for="budgetAlert">Budget Alerts</label>
+              </div>
+              <div class="form-check form-switch mb-4">
+                <input class="form-check-input" type="checkbox" id="marketUpdate">
+                <label class="form-check-label" for="marketUpdate">Market Updates</label>
+              </div>
+              <button class="btn btn-primary">Save Preferences</button>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Privacy & Security</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label">Change Password</label>
+                <input type="password" class="form-control mb-2" placeholder="Current Password">
+                <input type="password" class="form-control mb-2" placeholder="New Password">
+                <input type="password" class="form-control mb-3" placeholder="Confirm New Password">
+                <button class="btn btn-primary">Update Password</button>
+              </div>
+              <hr>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="twoFactor" checked>
+                <label class="form-check-label" for="twoFactor">Two-Factor Authentication</label>
+              </div>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="biometric">
+                <label class="form-check-label" for="biometric">Biometric Login</label>
+              </div>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="dataSharing">
+                <label class="form-check-label" for="dataSharing">Allow Data Sharing for Personalization</label>
+              </div>
             </div>
           </div>
         </div>
@@ -466,140 +1152,335 @@
     </div>
   </div>
 
-  <!-- Bootstrap & Firebase Scripts -->
+  <!-- JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  
   <script>
-    // Initialize Firebase with your config
-    const firebaseConfig = {
-      apiKey: "AIzaSyAV6soNboQLX37Bw1bBUuEykRcjSVfx8f0",
-      authDomain: "finmate-331bd.firebaseapp.com",
-      projectId: "finmate-331bd",
-      storageBucket: "finmate-331bd.appspot.com",
-      messagingSenderId: "778475988314",
-      appId: "1:778475988314:web:784b58228abded5a493f63",
-      measurementId: "G-L5N1TKPVTF"
-    };
-    
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    
-    // Check authentication and redirect to login if not logged in
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (!user) {
-        // User is not logged in, redirect to login page
-        window.location.href = "login.html";
-      } else {
-        // User is logged in, update UI with user info
-        document.getElementById('userName').textContent = user.displayName || 'Account';
-        document.getElementById('welcomeName').textContent = (user.displayName || 'User').split(' ')[0];
-      }
-    });
-    
-    // Logout function
-    document.getElementById('logoutBtn').addEventListener('click', function() {
-      firebase.auth().signOut()
-        .then(() => {
-          // Sign-out successful
-          window.location.href = "login.html";
-        })
-        .catch((error) => {
-          console.error("Logout Error:", error);
-        });
-    });
-    
-    // Initialize Charts
+    // Page Navigation
+    function showPage(event, pageId) {
+      event.preventDefault(); // Prevent default link behavior
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.classList.remove('active');
+      });
+
+      document.getElementById(pageId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    // Initialize charts when the DOM is loaded
     document.addEventListener('DOMContentLoaded', function() {
-      // Spending Overview Chart
-      const spendingCtx = document.getElementById('spendingChart').getContext('2d');
-      const spendingChart = new Chart(spendingCtx, {
-        type: 'line',
-        data: {
-          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-          datasets: [{
-            label: 'Income',
-            data: [650, 590, 800, 810],
-            borderColor: '#39ff14',
-            backgroundColor: 'rgba(57, 255, 20, 0.1)',
-            tension: 0.4,
-            fill: true
-          }, {
-            label: 'Expenses',
-            data: [400, 450, 320, 500],
-            borderColor: '#ff3939',
-            backgroundColor: 'rgba(255, 57, 57, 0.1)',
-            tension: 0.4,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              },
-              ticks: {
-                color: '#a0a0a0'
+      // Monthly Spending Chart
+      const spendingCtx = document.getElementById('spendingChart')?.getContext('2d');
+      if (spendingCtx) {
+        new Chart(spendingCtx, {
+          type: 'line',
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+              label: 'Monthly Spending',
+              data: [85000, 92000, 101000, 98500, 105000, 110000],
+              borderColor: '#39ff14',
+              backgroundColor: 'rgba(57, 255, 20, 0.1)',
+              tension: 0.3,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
               }
             },
-            x: {
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
+            scales: {
+              y: {
+                beginAtZero: false,
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                  color: '#ffffff'
+                }
               },
-              ticks: {
-                color: '#a0a0a0'
+              x: {
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                  color: '#ffffff'
+                }
               }
             }
+          }
+        });
+      }
+
+      // Category Spending Chart
+      const categoryCtx = document.getElementById('categoryChart')?.getContext('2d');
+      if (categoryCtx) {
+        new Chart(categoryCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Food & Groceries', 'Transportation', 'Housing', 'Entertainment', 'Utilities', 'Health'],
+            datasets: [{
+              data: [25000, 15000, 30000, 8000, 12000, 8500],
+              backgroundColor: [
+                '#39ff14',
+                '#14a4ff',
+                '#ff14a4',
+                '#ffa500',
+                '#a514ff',
+                '#ff3939'
+              ],
+              borderWidth: 0
+            }]
           },
-          plugins: {
-            legend: {
-              labels: {
-                color: '#ffffff'
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'right',
+                labels: {
+                  color: '#ffffff'
+                }
               }
-            }
+            },
+            cutout: '70%'
           }
-        }
-      });
-      
-      // Category Chart
-      const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-      const categoryChart = new Chart(categoryCtx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Housing', 'Food', 'Transportation', 'Entertainment', 'Utilities', 'Other'],
-          datasets: [{
-            data: [35, 25, 15, 10, 10, 5],
-            backgroundColor: [
-              '#39ff14',
-              '#14a4ff',
-              '#ff3939',
-              '#ffa500',
-              '#9c14ff',
-              '#ff14a4'
+        });
+      }
+
+      // Savings Progress Chart
+      const savingsCtx = document.getElementById('savingsProgressChart')?.getContext('2d');
+      if (savingsCtx) {
+        new Chart(savingsCtx, {
+          type: 'bar',
+          data: {
+            labels: ['Emergency Fund', 'New Car', 'Vacation Fund', 'Home Down Payment', 'Education Fund'],
+            datasets: [
+              {
+                label: 'Current Amount',
+                data: [750000, 600000, 50000, 0, 0],
+                backgroundColor: '#39ff14'
+              },
+              {
+                label: 'Target Amount',
+                data: [1000000, 1500000, 200000, 5000000, 2000000],
+                backgroundColor: 'rgba(255, 255, 255, 0.2)'
+              }
             ]
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                color: '#ffffff',
-                padding: 10
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: {
+                  color: '#ffffff'
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                  color: '#ffffff'
+                }
+              },
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                  color: '#ffffff'
+                }
               }
             }
           }
-        }
-      });
+        });
+      }
     });
+
+    // Shared Cost Management Script
+    const groups = {};
+    let currentGroup = '';
+
+    function updateDashboard() {
+      document.getElementById('totalGroups').textContent = Object.keys(groups).length;
+      document.getElementById('activeGroup').textContent = currentGroup || '-';
+
+      let memberCount = 0;
+      let totalExpenseAmount = 0;
+
+      if (currentGroup && groups[currentGroup]) {
+        memberCount = groups[currentGroup].members.length;
+        groups[currentGroup].expenses.forEach(exp => {
+          totalExpenseAmount += exp.amount;
+        });
+      }
+
+      document.getElementById('totalMembers').textContent = memberCount;
+      document.getElementById('totalExpenses').textContent = '₹' + totalExpenseAmount.toFixed(2);
+    }
+
+    function createGroup() {
+      const name = document.getElementById('groupName').value.trim();
+      if (name && !groups[name]) {
+        groups[name] = { members: [], expenses: [] };
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        document.getElementById('groupSelect').appendChild(option);
+        document.getElementById('groupName').value = '';
+        currentGroup = name;
+        document.getElementById('groupSelect').value = name;
+        refreshMembers();
+        updateDashboard();
+      }
+    }
+
+    function addMember() {
+      const member = document.getElementById('memberName').value.trim();
+      const upi = document.getElementById('memberUPI').value.trim();
+      if (member && upi && currentGroup && !groups[currentGroup].members.find(m => m.name === member)) {
+        groups[currentGroup].members.push({ name: member, upi });
+        refreshMembers();
+        document.getElementById('memberName').value = '';
+        document.getElementById('memberUPI').value = '';
+        updateDashboard();
+      }
+    }
+
+    function refreshMembers() {
+      const group = document.getElementById('groupSelect').value;
+      if (!group) return;
+      currentGroup = group;
+      const members = groups[group].members;
+      const paidBy = document.getElementById('paidBy');
+      paidBy.innerHTML = '';
+      members.forEach(member => {
+        const option = document.createElement('option');
+        option.value = member.name;
+        option.textContent = member.name;
+        paidBy.appendChild(option);
+      });
+      document.getElementById('memberList').innerHTML = 'Members: ' + members.map(m => m.name).join(', ');
+      updateHistory();
+      updateDashboard();
+    }
+
+    function addExpense() {
+      const paidBy = document.getElementById('paidBy').value;
+      const amount = parseFloat(document.getElementById('amount').value);
+      const description = document.getElementById('description').value.trim();
+      if (paidBy && amount && description) {
+        const date = new Date().toLocaleDateString();
+        const expense = { paidBy, amount, description, date };
+        groups[currentGroup].expenses.push(expense);
+        document.getElementById('amount').value = '';
+        document.getElementById('description').value = '';
+        updateHistory();
+        updateDashboard();
+      }
+    }
+
+    function updateHistory() {
+      const history = document.getElementById('expenseHistory');
+      const dailyOweList = document.getElementById('dailyOweList');
+      const balanceTable = document.getElementById('balanceTable');
+      const conclusion = document.getElementById('conclusion');
+      const qrSection = document.getElementById('qrSection');
+
+      history.innerHTML = '';
+      dailyOweList.innerHTML = '';
+      balanceTable.innerHTML = '';
+      conclusion.innerHTML = '';
+      qrSection.innerHTML = '';
+
+      if (!currentGroup || !groups[currentGroup]) {
+        history.innerHTML = '<li class="text-muted text-center py-3">No expenses yet</li>';
+        dailyOweList.innerHTML = '<li class="text-muted text-center py-3">No settlement needed</li>';
+        balanceTable.innerHTML = '<tr><td colspan="2" class="text-center text-muted">No data available</td></tr>';
+        return;
+      }
+
+      const members = groups[currentGroup].members;
+      const balances = {};
+      const dailyMap = {};
+
+      members.forEach(member => balances[member.name] = 0);
+
+      groups[currentGroup].expenses.forEach(exp => {
+        const share = exp.amount / members.length;
+        members.forEach(member => {
+          if (member.name === exp.paidBy) {
+            balances[member.name] += exp.amount - share;
+          } else {
+            balances[member.name] -= share;
+          }
+        });
+        const li = document.createElement('li');
+        li.textContent = `${exp.paidBy} paid ₹${exp.amount} for ${exp.description} on ${exp.date}`;
+        history.appendChild(li);
+
+        if (!dailyMap[exp.date]) dailyMap[exp.date] = [];
+        dailyMap[exp.date].push(exp);
+      });
+
+      for (let member in balances) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${member}</td><td>₹${balances[member].toFixed(2)}</td>`;
+        balanceTable.appendChild(row);
+      }
+
+      for (const date in dailyMap) {
+        const balances = {};
+        members.forEach(m => balances[m.name] = 0);
+        dailyMap[date].forEach(exp => {
+          const share = exp.amount / members.length;
+          members.forEach(member => {
+            if (member.name === exp.paidBy) balances[member.name] += exp.amount - share;
+            else balances[member.name] -= share;
+          });
+        });
+        const oweList = computeOweList(balances);
+        oweList.forEach(([from, to, amount]) => {
+          const li = document.createElement('li');
+          li.textContent = `${date}: ${from} owes ${to} ₹${amount.toFixed(2)}`;
+          dailyOweList.appendChild(li);
+        });
+      }
+    }
+
+    function computeOweList(balances) {
+      const creditors = [], debtors = [];
+      for (let person in balances) {
+        if (balances[person] > 0.01) creditors.push([person, balances[person]]);
+        else if (balances[person] < -0.01) debtors.push([person, -balances[person]]);
+      }
+      const result = [];
+      let i = 0, j = 0;
+      while (i < debtors.length && j < creditors.length) {
+        const [debtor, dAmt] = debtors[i];
+        const [creditor, cAmt] = creditors[j];
+        const settleAmt = Math.min(dAmt, cAmt);
+        result.push([debtor, creditor, settleAmt]);
+        debtors[i][1] -= settleAmt;
+        creditors[j][1] -= settleAmt;
+        if (debtors[i][1] < 0.01) i++;
+        if (creditors[j][1] < 0.01) j++;
+      }
+      return result;
+    }
   </script>
 </body>
 </html>
