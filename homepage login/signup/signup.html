@@ -231,91 +231,91 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <!-- Replace the script section in signup.html with this -->
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+<script>
+  // Initialize Firebase with your config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAV6soNboQLX37Bw1bBUuEykRcjSVfx8f0",
+    authDomain: "finmate-331bd.firebaseapp.com",
+    projectId: "finmate-331bd",
+    storageBucket: "finmate-331bd.appspot.com",
+    messagingSenderId: "778475988314",
+    appId: "1:778475988314:web:784b58228abded5a493f63",
+    measurementId: "G-L5N1TKPVTF"
+  };
   
-  <script>
-    // Initialize Firebase with your config
-    const firebaseConfig = {
-      // Your Firebase config will go here
-      // This will be replaced with your actual Firebase config
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  
+  // Signup form submission
+  document.getElementById('signupForm').addEventListener('submit', function(e) {
+    e.preventDefault();
     
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const errorMessage = document.getElementById('errorMessage');
     
-    // Signup form submission
-    document.getElementById('signupForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      const firstName = document.getElementById('firstName').value;
-      const lastName = document.getElementById('lastName').value;
-      const errorMessage = document.getElementById('errorMessage');
-      
-      // Check if passwords match
-      if (password !== confirmPassword) {
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      errorMessage.style.display = 'block';
+      errorMessage.textContent = "Passwords do not match";
+      return;
+    }
+    
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Update user profile with name
+        userCredential.user.updateProfile({
+          displayName: firstName + " " + lastName
+        }).then(() => {
+          // Redirect to dashboard
+          window.location.href = 'dashboard.html';
+        });
+      })
+      .catch((error) => {
         errorMessage.style.display = 'block';
-        errorMessage.textContent = "Passwords do not match";
-        return;
-      }
-      
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          // Update user profile with name
-          userCredential.user.updateProfile({
-            displayName: firstName + " " + lastName
-          }).then(() => {
-            // Redirect to dashboard
-            window.location.href = 'dashboard.html';
-          });
-        })
-        .catch((error) => {
-          errorMessage.style.display = 'block';
-          errorMessage.textContent = error.message;
-        });
-    });
-    
-    // Google signup
-    document.getElementById('googleSignup').addEventListener('click', function() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider)
-        .then((result) => {
-          window.location.href = 'dashboard.html';
-        }).catch((error) => {
-          document.getElementById('errorMessage').style.display = 'block';
-          document.getElementById('errorMessage').textContent = error.message;
-        });
-    });
-    
-    // Facebook signup
-    document.getElementById('facebookSignup').addEventListener('click', function() {
-      const provider = new firebase.auth.FacebookAuthProvider();
-      firebase.auth().signInWithPopup(provider)
-        .then((result) => {
-          window.location.href = 'dashboard.html';
-        }).catch((error) => {
-          document.getElementById('errorMessage').style.display = 'block';
-          document.getElementById('errorMessage').textContent = error.message;
-        });
-    });
-    
-    // Check if user is already logged in
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        // User is signed in, redirect to dashboard
+        errorMessage.textContent = error.message;
+      });
+  });
+  
+  // Google signup
+  document.getElementById('googleSignup').addEventListener('click', function() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider)
+      .then((result) => {
         window.location.href = 'dashboard.html';
-      }
-    });
-  </script>
+      }).catch((error) => {
+        document.getElementById('errorMessage').style.display = 'block';
+        document.getElementById('errorMessage').textContent = error.message;
+      });
+  });
+  
+  // Facebook signup
+  document.getElementById('facebookSignup').addEventListener('click', function() {
+    const provider = new firebase.auth.FacebookAuthProvider();
+    firebase.auth().signInWithPopup(provider)
+      .then((result) => {
+        window.location.href = 'dashboard.html';
+      }).catch((error) => {
+        document.getElementById('errorMessage').style.display = 'block';
+        document.getElementById('errorMessage').textContent = error.message;
+      });
+  });
+  
+  // Check if user is already logged in
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // User is signed in, redirect to dashboard
+      window.location.href = 'dashboard.html';
+    }
+  });
+</script>
 </body>
 </html>

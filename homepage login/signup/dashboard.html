@@ -1,13 +1,605 @@
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="firebase-config.js"></script>
-
-<!-- Restrict access to logged-in users -->
-<script>
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (!user) {
-      window.location.href = "login.html";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - FinMate</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      min-height: 100vh;
     }
-  });
-</script>
+
+    .navbar {
+      background-color: #2c2c2c;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    .navbar-brand span {
+      color: #39ff14;
+    }
+
+    .nav-link {
+      color: #ffffff;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: #39ff14;
+    }
+
+    .active {
+      color: #39ff14;
+    }
+
+    .sidebar {
+      background-color: #2c2c2c;
+      height: calc(100vh - 56px);
+      position: fixed;
+      width: 250px;
+      box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+      padding-top: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-link {
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .sidebar-link:hover {
+      background-color: #383838;
+      color: #39ff14;
+    }
+
+    .sidebar-link.active {
+      background-color: #383838;
+      color: #39ff14;
+      border-left: 4px solid #39ff14;
+    }
+
+    .sidebar-link i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .card {
+      background-color: #2c2c2c;
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      background-color: #383838;
+      border-bottom: none;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      padding: 15px 20px;
+      font-weight: 600;
+    }
+
+    .stats-card {
+      background-color: #2c2c2c;
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    .stats-icon {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      border-radius: 10px;
+      margin-right: 15px;
+    }
+
+    .stats-icon.green {
+      background-color: rgba(57, 255, 20, 0.2);
+      color: #39ff14;
+    }
+
+    .stats-icon.red {
+      background-color: rgba(255, 57, 57, 0.2);
+      color: #ff3939;
+    }
+
+    .stats-icon.blue {
+      background-color: rgba(20, 164, 255, 0.2);
+      color: #14a4ff;
+    }
+
+    .stats-icon.orange {
+      background-color: rgba(255, 165, 0, 0.2);
+      color: #ffa500;
+    }
+
+    .stats-info h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .stats-info p {
+      margin-bottom: 0;
+      color: #a0a0a0;
+      font-size: 0.9rem;
+    }
+
+    .btn-action {
+      background-color: #39ff14;
+      color: #1e1e1e;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-action:hover {
+      background-color: #32e314;
+      transform: translateY(-2px);
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background-color: #ff3939;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    
+    #accountDropdown {
+      cursor: pointer;
+    }
+    
+    .welcome-message {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+    
+    @media (max-width: 992px) {
+      .sidebar {
+        width: 70px;
+        padding-top: 15px;
+      }
+      
+      .sidebar-link span {
+        display: none;
+      }
+      
+      .sidebar-link {
+        justify-content: center;
+        padding: 15px;
+      }
+      
+      .sidebar-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+      }
+      
+      .main-content {
+        margin-left: 70px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+    }
+    
+    .chart-container {
+      height: 300px;
+    }
+    
+    .table {
+      color: #ffffff;
+    }
+    
+    .table thead {
+      border-color: #444;
+    }
+    
+    .table td, .table th {
+      border-color: #444;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="dashboard.html">Fin<span>Mate</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link position-relative me-3" href="#" id="notificationsLink">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">3</span>
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-user-circle"></i> <span id="userName">Account</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end bg-dark">
+              <li><a class="dropdown-item text-light" href="#"><i class="fas fa-user-cog me-2"></i> Profile Settings</a></li>
+              <li><a class="dropdown-item text-light" href="#"><i class="fas fa-lock me-2"></i> Security</a></li>
+              <li><hr class="dropdown-divider bg-secondary"></li>
+              <li><a class="dropdown-item text-light" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="dashboard.html" class="sidebar-link active">
+      <i class="fas fa-th-large"></i>
+      <span>Dashboard</span>
+    </a>
+    <a href="#" class="sidebar-link">
+      <i class="fas fa-wallet"></i>
+      <span>Accounts</span>
+    </a>
+    <a href="#" class="sidebar-link">
+      <i class="fas fa-exchange-alt"></i>
+      <span>Transactions</span>
+    </a>
+    <a href="#" class="sidebar-link">
+      <i class="fas fa-chart-pie"></i>
+      <span>Budget</span>
+    </a>
+    <a href="#" class="sidebar-link">
+      <i class="fas fa-chart-line"></i>
+      <span>Investments</span>
+    </a>
+    <a href="#" class="sidebar-link">
+      <i class="fas fa-piggy-bank"></i>
+      <span>Savings Goals</span>
+    </a>
+    <a href="#" class="sidebar-link">
+      <i class="fas fa-file-invoice-dollar"></i>
+      <span>Bills</span>
+    </a>
+    <a href="#" class="sidebar-link">
+      <i class="fas fa-cog"></i>
+      <span>Settings</span>
+    </a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="welcome-message">Welcome, <span id="welcomeName">User</span>!</div>
+    
+    <!-- Stats Row -->
+    <div class="row">
+      <div class="col-xl-3 col-md-6">
+        <div class="stats-card">
+          <div class="stats-icon green">
+            <i class="fas fa-dollar-sign"></i>
+          </div>
+          <div class="stats-info">
+            <h3>$5,428.20</h3>
+            <p>Total Balance</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="stats-card">
+          <div class="stats-icon red">
+            <i class="fas fa-credit-card"></i>
+          </div>
+          <div class="stats-info">
+            <h3>$1,256.75</h3>
+            <p>Monthly Expenses</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="stats-card">
+          <div class="stats-icon blue">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="stats-info">
+            <h3>$842.50</h3>
+            <p>Monthly Income</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="stats-card">
+          <div class="stats-icon orange">
+            <i class="fas fa-piggy-bank"></i>
+          </div>
+          <div class="stats-info">
+            <h3>$2,150.00</h3>
+            <p>Savings</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Charts Row -->
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Spending Overview</span>
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-light">Week</button>
+              <button type="button" class="btn btn-sm btn-outline-light active">Month</button>
+              <button type="button" class="btn btn-sm btn-outline-light">Year</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="spendingChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-header">
+            <span>Expense Categories</span>
+          </div>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="categoryChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Recent Transactions -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Recent Transactions</span>
+            <button class="btn btn-sm btn-action">View All</button>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Apr 05, 2025</td>
+                    <td>Grocery Store</td>
+                    <td>Food & Groceries</td>
+                    <td class="text-danger">-$89.24</td>
+                    <td><span class="badge bg-success">Completed</span></td>
+                  </tr>
+                  <tr>
+                    <td>Apr 04, 2025</td>
+                    <td>Monthly Salary</td>
+                    <td>Income</td>
+                    <td class="text-success">+$3,250.00</td>
+                    <td><span class="badge bg-success">Completed</span></td>
+                  </tr>
+                  <tr>
+                    <td>Apr 03, 2025</td>
+                    <td>Coffee Shop</td>
+                    <td>Food & Drinks</td>
+                    <td class="text-danger">-$4.85</td>
+                    <td><span class="badge bg-success">Completed</span></td>
+                  </tr>
+                  <tr>
+                    <td>Apr 03, 2025</td>
+                    <td>Electric Bill</td>
+                    <td>Utilities</td>
+                    <td class="text-danger">-$125.40</td>
+                    <td><span class="badge bg-success">Completed</span></td>
+                  </tr>
+                  <tr>
+                    <td>Apr 02, 2025</td>
+                    <td>Streaming Service</td>
+                    <td>Entertainment</td>
+                    <td class="text-danger">-$14.99</td>
+                    <td><span class="badge bg-success">Completed</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap & Firebase Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  
+  <script>
+    // Initialize Firebase with your config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAV6soNboQLX37Bw1bBUuEykRcjSVfx8f0",
+      authDomain: "finmate-331bd.firebaseapp.com",
+      projectId: "finmate-331bd",
+      storageBucket: "finmate-331bd.appspot.com",
+      messagingSenderId: "778475988314",
+      appId: "1:778475988314:web:784b58228abded5a493f63",
+      measurementId: "G-L5N1TKPVTF"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    
+    // Check authentication and redirect to login if not logged in
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (!user) {
+        // User is not logged in, redirect to login page
+        window.location.href = "login.html";
+      } else {
+        // User is logged in, update UI with user info
+        document.getElementById('userName').textContent = user.displayName || 'Account';
+        document.getElementById('welcomeName').textContent = (user.displayName || 'User').split(' ')[0];
+      }
+    });
+    
+    // Logout function
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      firebase.auth().signOut()
+        .then(() => {
+          // Sign-out successful
+          window.location.href = "login.html";
+        })
+        .catch((error) => {
+          console.error("Logout Error:", error);
+        });
+    });
+    
+    // Initialize Charts
+    document.addEventListener('DOMContentLoaded', function() {
+      // Spending Overview Chart
+      const spendingCtx = document.getElementById('spendingChart').getContext('2d');
+      const spendingChart = new Chart(spendingCtx, {
+        type: 'line',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+          datasets: [{
+            label: 'Income',
+            data: [650, 590, 800, 810],
+            borderColor: '#39ff14',
+            backgroundColor: 'rgba(57, 255, 20, 0.1)',
+            tension: 0.4,
+            fill: true
+          }, {
+            label: 'Expenses',
+            data: [400, 450, 320, 500],
+            borderColor: '#ff3939',
+            backgroundColor: 'rgba(255, 57, 57, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: '#a0a0a0'
+              }
+            },
+            x: {
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: '#a0a0a0'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              labels: {
+                color: '#ffffff'
+              }
+            }
+          }
+        }
+      });
+      
+      // Category Chart
+      const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+      const categoryChart = new Chart(categoryCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Housing', 'Food', 'Transportation', 'Entertainment', 'Utilities', 'Other'],
+          datasets: [{
+            data: [35, 25, 15, 10, 10, 5],
+            backgroundColor: [
+              '#39ff14',
+              '#14a4ff',
+              '#ff3939',
+              '#ffa500',
+              '#9c14ff',
+              '#ff14a4'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: '#ffffff',
+                padding: 10
+              }
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
