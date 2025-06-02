@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #39ff14;
+  --primary-dark: #32e314;
+  --background: #1e1e1e;
+  --surface: #2c2c2c;
+  --text: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-black font-semibold px-4 py-2 rounded-lg 
+           transition-all duration-300 hover:bg-[#32e314] 
+           hover:shadow-[0_10px_20px_rgba(57,255,20,0.3)] 
+           hover:-translate-y-1;
+  }
+}
